@@ -1,6 +1,14 @@
 /**
- * AddShoppingItemDialog provides a dialog interface for adding new items
- * to the shopping list. It includes fields for item name, quantity, and unit selection.
+ * AddShoppingItemDialog - Helps Add New Items to Your Shopping List
+ * 
+ * This class shows a small window where you can add your own items
+ * to your shopping list. It's like having a helper that asks:
+ * - What do you want to buy?
+ * - How much do you need?
+ * - What unit of measurement? (like cups, pieces, etc.)
+ * 
+ * It makes it easy to add anything you need to buy,
+ * even if it's not from a recipe.
  */
 package com.example.recipe_app;
 
@@ -13,21 +21,29 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 public class AddShoppingItemDialog extends DialogFragment {
-    // Callback interface for handling item addition
+    // Who to tell when a new item is added
     private OnItemAddedListener listener;
 
     /**
-     * Sets the listener for item addition events
-     * @param listener The listener to be notified when an item is added
+     * Interface for telling the app about new items
      */
-    public void setOnItemAddedListener(OnItemAddedListener listener) {
-        this.listener = listener;
+    public interface OnItemAddedListener {
+        void onItemAdded(String name, String quantity, String unit);
     }
 
     /**
-     * Creates and returns a dialog for adding shopping items
-     * @param savedInstanceState The last saved instance state of the Fragment
-     * @return A new Dialog instance to be displayed by the Fragment
+     * Creates a new dialog for adding items
+     * 
+     * @param listener Who to tell when an item is added
+     */
+    public static AddShoppingItemDialog newInstance(OnItemAddedListener listener) {
+        AddShoppingItemDialog dialog = new AddShoppingItemDialog();
+        dialog.listener = listener;
+        return dialog;
+    }
+
+    /**
+     * Shows the dialog with fields for the new item
      */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -35,37 +51,30 @@ public class AddShoppingItemDialog extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_add_shopping_item, null);
 
-        EditText nameInput = view.findViewById(R.id.item_name_input);
-        EditText quantityInput = view.findViewById(R.id.item_quantity_input);
-        EditText unitInput = view.findViewById(R.id.item_unit_input);
+        // Get the input fields
+        EditText nameInput = view.findViewById(R.id.nameInput);
+        EditText quantityInput = view.findViewById(R.id.quantityInput);
+        EditText unitInput = view.findViewById(R.id.unitInput);
 
+        // Set up the dialog buttons
         builder.setView(view)
-                .setTitle("Add Shopping Item")
-                .setPositiveButton("Add", (dialog, id) -> {
-                    String name = nameInput.getText().toString().trim();
-                    String quantity = quantityInput.getText().toString().trim();
-                    String unit = unitInput.getText().toString().trim();
+               .setTitle("Add Shopping Item")
+               .setPositiveButton("Add", (dialog, id) -> {
+                   // Get what was typed in
+                   String name = nameInput.getText().toString().trim();
+                   String quantity = quantityInput.getText().toString().trim();
+                   String unit = unitInput.getText().toString().trim();
 
-                    if (!name.isEmpty()) {
-                        ShoppingListItem item = new ShoppingListItem(name, quantity.isEmpty() ? "1" : quantity, unit);
-                        if (listener != null) {
-                            listener.onItemAdded(item);
-                        }
-                    }
-                })
-                .setNegativeButton("Cancel", (dialog, id) -> dialog.cancel());
+                   // Only add if there's a name
+                   if (!name.isEmpty() && listener != null) {
+                       listener.onItemAdded(name, quantity, unit);
+                   }
+               })
+               .setNegativeButton("Cancel", (dialog, id) -> {
+                   // Just close the dialog
+                   dialog.cancel();
+               });
 
         return builder.create();
-    }
-
-    /**
-     * Interface for handling item addition events
-     */
-    public interface OnItemAddedListener {
-        /**
-         * Called when a new item is added to the shopping list
-         * @param item The newly added shopping item
-         */
-        void onItemAdded(ShoppingListItem item);
     }
 }

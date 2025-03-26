@@ -1,3 +1,15 @@
+/**
+ * RecipeHistory - Remembers What Recipes You've Looked At
+ * 
+ * This class is like a diary that keeps track of all the recipes
+ * you've viewed in the app. It helps:
+ * - Show you recipes you looked at before
+ * - Keep track of your favorite recipes
+ * - Remember what you like to cook
+ * 
+ * It saves this information on your phone so you can find
+ * your favorite recipes again easily.
+ */
 package com.example.recipe_app;
 
 import android.content.Context;
@@ -9,58 +21,85 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeHistory {
-    private static final String PREF_NAME = "RecipeHistoryPrefs";
-    private static final String HISTORY_KEY = "recipe_history";
+    // How many recipes to remember (maximum)
     private static final int MAX_HISTORY_SIZE = 50;
-
-    private final SharedPreferences sharedPreferences;
-    private List<Recipe> history;
-
+    
+    // Where we save the history
+    private static final String PREFS_NAME = "RecipeHistoryPrefs";
+    private static final String HISTORY_KEY = "recipe_history";
+    
+    // Tools we use to save and load recipes
+    private final SharedPreferences preferences;
+    private final Gson gson;
+    
+    /**
+     * Creates a new recipe history tracker
+     * 
+     * This sets up everything we need to remember which recipes
+     * you've looked at.
+     */
     public RecipeHistory(Context context) {
-        sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        loadHistory();
+        preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        gson = new Gson();
     }
-
-    private void loadHistory() {
-        String jsonHistory = sharedPreferences.getString(HISTORY_KEY, "[]");
-        Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<Recipe>>() {}.getType();
-        history = gson.fromJson(jsonHistory, type);
-        if (history == null) {
-            history = new ArrayList<>();
+    
+    /**
+     * Gets the list of recipes you've looked at
+     * 
+     * This is like opening your recipe diary to see what you've
+     * cooked before.
+     */
+    public List<Recipe> getHistory() {
+        String historyJson = preferences.getString(HISTORY_KEY, "");
+        if (historyJson.isEmpty()) {
+            return new ArrayList<>();
         }
+        
+        Type type = new TypeToken<List<Recipe>>(){}.getType();
+        return gson.fromJson(historyJson, type);
     }
-
+    
+    /**
+     * Adds a recipe to your history
+     * 
+     * This is like writing down a new recipe in your diary.
+     * If you've already seen this recipe, it moves it to
+     * the front of the list.
+     */
     public void addToHistory(Recipe recipe) {
-        // Remove if already exists to avoid duplicates
+        List<Recipe> history = getHistory();
+        
+        // Remove the recipe if it's already in history
         history.removeIf(r -> r.getId().equals(recipe.getId()));
         
-        // Add to beginning of list
+        // Add the recipe to the start of the list
         history.add(0, recipe);
         
-        // Trim if exceeds max size
+        // Keep only the most recent recipes
         if (history.size() > MAX_HISTORY_SIZE) {
             history = history.subList(0, MAX_HISTORY_SIZE);
         }
         
-        // Save updated history
-        saveHistory();
+        // Save the updated history
+        saveHistory(history);
     }
-
-    public List<Recipe> getHistory() {
-        return new ArrayList<>(history);
+    
+    /**
+     * Saves your recipe history
+     * 
+     * This is like closing your recipe diary after writing in it.
+     */
+    private void saveHistory(List<Recipe> history) {
+        String historyJson = gson.toJson(history);
+        preferences.edit().putString(HISTORY_KEY, historyJson).apply();
     }
-
+    
+    /**
+     * Clears your recipe history
+     * 
+     * This is like starting a new recipe diary from scratch.
+     */
     public void clearHistory() {
-        history.clear();
-        saveHistory();
-    }
-
-    private void saveHistory() {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Gson gson = new Gson();
-        String jsonHistory = gson.toJson(history);
-        editor.putString(HISTORY_KEY, jsonHistory);
-        editor.apply();
+        preferences.edit().remove(HISTORY_KEY).apply();
     }
 } 

@@ -1,3 +1,15 @@
+/**
+ * ExampleInstrumentedTest - Tests Our App on a Real Phone
+ * 
+ * This class helps us test our app on actual phones or tablets.
+ * It's like having a friend try out the app to make sure everything works
+ * the way it should in real life.
+ * 
+ * For example, it can test:
+ * - If the app starts up properly
+ * - If buttons work when tapped
+ * - If recipes show up correctly on the screen
+ */
 package com.example.recipe_app;
 
 import android.content.Context;
@@ -11,16 +23,18 @@ import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 
 /**
- * Instrumented test, which will execute on an Android device.
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ * Tests that run on an Android device or emulator
  */
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
+    /**
+     * Makes sure our app's package name is correct
+     */
     @Test
     public void useAppContext() {
-        // Context of the app under test.
+        // Get the app's test environment
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        // Check if the package name matches our app
         assertEquals("com.example.recipe_app", appContext.getPackageName());
     }
 }

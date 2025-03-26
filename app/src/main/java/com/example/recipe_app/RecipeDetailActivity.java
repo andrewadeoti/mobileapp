@@ -11,7 +11,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +26,8 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,6 +57,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private RecyclerView instructionsRecyclerView;  // List of cooking instructions
     private MaterialButton saveToFavoritesButton;   // Save to favorites button
     private MaterialButton shareButton;             // Share recipe button
+    private View progressBar;                       // Loading indicator
+    private TextView noIngredientsText;            // Text shown when no ingredients
+    private TextView noInstructionsText;           // Text shown when no instructions
+    private Recipe currentRecipe;                  // Current recipe being displayed
     
     // Adapters
     private IngredientAdapter ingredientAdapter;    // Adapter for ingredients list
@@ -98,6 +106,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
             instructionsRecyclerView = findViewById(R.id.instructionsRecyclerView);
             saveToFavoritesButton = findViewById(R.id.saveToFavoritesButton);
             shareButton = findViewById(R.id.shareButton);
+            progressBar = findViewById(R.id.progressBar);
+            noIngredientsText = findViewById(R.id.noIngredientsText);
+            noInstructionsText = findViewById(R.id.noInstructionsText);
 
             // Set up RecyclerViews
             ingredientsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -122,70 +133,109 @@ public class RecipeDetailActivity extends AppCompatActivity {
     }
 
     private void displayRecipeDetails() {
-        try {
-            Recipe recipe = (Recipe) getIntent().getSerializableExtra("RECIPE");
-            if (recipe != null) {
-                // Set basic information
-                recipeName.setText(recipe.getName());
-                recipeDescription.setText(recipe.getDescription());
-                prepTime.setText(String.format("Prep: %d min", recipe.getPrepTime()));
-                cookTime.setText(String.format("Cook: %d min", recipe.getCookTime()));
-                servings.setText(String.format("Serves: %d", recipe.getServings()));
+        String recipeId = getIntent().getStringExtra(EXTRA_RECIPE_ID);
+        if (recipeId == null) {
+            Toast.makeText(this, "Error: Recipe not found", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
-                // Load image using Glide
-                if (recipe.getImageUrl() != null && !recipe.getImageUrl().isEmpty()) {
-                    Glide.with(this)
-                        .load(recipe.getImageUrl())
-                        .centerCrop()
-                        .into(recipeImage);
-                }
+        // Show loading indicator
+        progressBar.setVisibility(View.VISIBLE);
 
-                // Set up ingredients
-                if (recipe.getIngredients() != null) {
-                    ingredientAdapter = new IngredientAdapter(recipe.getIngredients());
-                    ingredientsRecyclerView.setAdapter(ingredientAdapter);
-                }
+        // Load recipe from Firebase
+        FirebaseManager.getInstance().getRecipe(recipeId, new FirebaseManager.FirebaseCallback<Recipe>() {
+            @Override
+            public void onSuccess(Recipe recipe) {
+                // Hide loading indicator
+                progressBar.setVisibility(View.GONE);
 
-                // Set up instructions
-                if (recipe.getInstructions() != null) {
-                    instructionAdapter = new InstructionAdapter(recipe.getInstructions());
-                    instructionsRecyclerView.setAdapter(instructionAdapter);
-                }
+                if (recipe != null) {
+                    currentRecipe = recipe;
+                    
+                    // Set basic information
+                    recipeName.setText(recipe.getName());
+                    recipeDescription.setText(recipe.getDescription());
+                    prepTime.setText(String.format("Prep: %d min", recipe.getPrepTime()));
+                    cookTime.setText(String.format("Cook: %d min", recipe.getCookTime()));
+                    servings.setText(String.format("Serves: %d", recipe.getServings()));
 
-                // Set up dietary tags
-                if (recipe.getDietaryTags() != null) {
-                    dietaryTagsGroup.removeAllViews();
-                    for (String tag : recipe.getDietaryTags()) {
-                        Chip chip = new Chip(this);
-                        chip.setText(tag);
-                        chip.setClickable(false);
-                        dietaryTagsGroup.addView(chip);
-                    }
-                }
-
-                // Check if recipe is in favorites
-                FirebaseManager.getInstance().isFavorite(recipe.getId(), new FirebaseManager.FirebaseCallback<Boolean>() {
-                    @Override
-                    public void onSuccess(Boolean isFavorite) {
-                        recipe.setFavorite(isFavorite);
-                        updateFavoriteButtonState();
+                    // Load image using Glide
+                    if (recipe.getImageUrl() != null && !recipe.getImageUrl().isEmpty()) {
+                        Glide.with(RecipeDetailActivity.this)
+                            .load(recipe.getImageUrl())
+                            .placeholder(R.drawable.placeholder_image)
+                            .error(R.drawable.error_image)
+                            .centerCrop()
+                            .into(recipeImage);
                     }
 
-                    @Override
-                    public void onFailure(Exception e) {
-                        Log.e("RecipeDetail", "Error checking favorite status: " + e.getMessage());
+                    // Set up ingredients
+                    if (recipe.getIngredients() != null && !recipe.getIngredients().isEmpty()) {
+                        ingredientAdapter = new IngredientAdapter(recipe.getIngredients());
+                        ingredientsRecyclerView.setAdapter(ingredientAdapter);
+                        ingredientsRecyclerView.setVisibility(View.VISIBLE);
+                        noIngredientsText.setVisibility(View.GONE);
+                    } else {
+                        ingredientsRecyclerView.setVisibility(View.GONE);
+                        noIngredientsText.setVisibility(View.VISIBLE);
                     }
-                });
 
-                // Set up button click listeners
-                setupButtonListeners();
-            } else {
+                    // Set up instructions
+                    if (recipe.getInstructions() != null && !recipe.getInstructions().isEmpty()) {
+                        instructionAdapter = new InstructionAdapter(recipe.getInstructions());
+                        instructionsRecyclerView.setAdapter(instructionAdapter);
+                        instructionsRecyclerView.setVisibility(View.VISIBLE);
+                        noInstructionsText.setVisibility(View.GONE);
+                    } else {
+                        instructionsRecyclerView.setVisibility(View.GONE);
+                        noInstructionsText.setVisibility(View.VISIBLE);
+                    }
+
+                    // Set up dietary tags
+                    if (recipe.getDietaryTags() != null && !recipe.getDietaryTags().isEmpty()) {
+                        dietaryTagsGroup.removeAllViews();
+                        for (String tag : recipe.getDietaryTags()) {
+                            Chip chip = new Chip(RecipeDetailActivity.this);
+                            chip.setText(tag);
+                            chip.setClickable(false);
+                            dietaryTagsGroup.addView(chip);
+                        }
+                        dietaryTagsGroup.setVisibility(View.VISIBLE);
+                    } else {
+                        dietaryTagsGroup.setVisibility(View.GONE);
+                    }
+
+                    // Update favorite button state
+                    updateFavoriteButton(recipe.isFavorite());
+
+                    // Setup button listeners
+                    setupButtonListeners();
+
+                    // Add to history
+                    FirebaseManager.getInstance().addToHistory(recipe.getId(), new FirebaseManager.FirebaseCallback<Void>() {
+                        @Override
+                        public void onSuccess(Void result) {
+                            Log.d("RecipeDetail", "Added to history: " + recipe.getName());
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            Log.e("RecipeDetail", "Error adding to history: " + e.getMessage());
+                        }
+                    });
+                } else {
+                    showErrorAndFinish();
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                // Hide loading indicator
+                progressBar.setVisibility(View.GONE);
                 showErrorAndFinish();
             }
-        } catch (Exception e) {
-            Log.e("RecipeDetail", "Error displaying recipe details: " + e.getMessage());
-            showErrorAndFinish();
-        }
+        });
     }
 
     private void setupButtonListeners() {
@@ -203,7 +253,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     }
 
     private void showErrorAndFinish() {
-        Toast.makeText(this, "Error loading recipe details", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Error loading recipe", Toast.LENGTH_SHORT).show();
         finish();
     }
 
@@ -408,19 +458,30 @@ public class RecipeDetailActivity extends AppCompatActivity {
         }
     }
 
-    private void toggleFavorite() {
-        if (recipe == null) return;
+    private void updateFavoriteButton(boolean isFavorite) {
+        if (saveToFavoritesButton != null) {
+            saveToFavoritesButton.setIconResource(
+                isFavorite ? R.drawable.ic_favorite_filled : R.drawable.ic_favorite_border
+            );
+            saveToFavoritesButton.setText(
+                isFavorite ? "Remove from Favorites" : "Add to Favorites"
+            );
+        }
+    }
 
-        // Disable button to prevent multiple clicks
+    private void toggleFavorite() {
+        if (currentRecipe == null) return;
+
+        // Disable button while processing
         saveToFavoritesButton.setEnabled(false);
 
-        if (recipe.isFavorite()) {
+        if (currentRecipe.isFavorite()) {
             // Remove from favorites
-            FirebaseManager.getInstance().removeFavorite(recipe.getId(), new FirebaseManager.FirebaseCallback<Void>() {
+            FirebaseManager.getInstance().removeFavorite(currentRecipe.getId(), new FirebaseManager.FirebaseCallback<Void>() {
                 @Override
                 public void onSuccess(Void result) {
-                    recipe.setFavorite(false);
-                    updateFavoriteButtonState();
+                    currentRecipe.setFavorite(false);
+                    updateFavoriteButton(false);
                     saveToFavoritesButton.setEnabled(true);
                     Toast.makeText(RecipeDetailActivity.this, "Removed from favorites", Toast.LENGTH_SHORT).show();
                 }
@@ -428,16 +489,16 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Exception e) {
                     saveToFavoritesButton.setEnabled(true);
-                    Toast.makeText(RecipeDetailActivity.this, "Error removing from favorites: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RecipeDetailActivity.this, "Error removing from favorites", Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
             // Add to favorites
-            FirebaseManager.getInstance().addFavorite(recipe.getId(), new FirebaseManager.FirebaseCallback<Void>() {
+            FirebaseManager.getInstance().addFavorite(currentRecipe.getId(), new FirebaseManager.FirebaseCallback<Void>() {
                 @Override
                 public void onSuccess(Void result) {
-                    recipe.setFavorite(true);
-                    updateFavoriteButtonState();
+                    currentRecipe.setFavorite(true);
+                    updateFavoriteButton(true);
                     saveToFavoritesButton.setEnabled(true);
                     Toast.makeText(RecipeDetailActivity.this, "Added to favorites", Toast.LENGTH_SHORT).show();
                 }
@@ -445,35 +506,29 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Exception e) {
                     saveToFavoritesButton.setEnabled(true);
-                    Toast.makeText(RecipeDetailActivity.this, "Error adding to favorites: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RecipeDetailActivity.this, "Error adding to favorites", Toast.LENGTH_SHORT).show();
                 }
             });
         }
     }
 
     private void shareRecipe() {
-        String shareText = generateShareText();
+        if (currentRecipe == null) return;
+
+        String shareText = String.format(
+            "%s\n\nPrep Time: %d min\nCook Time: %d min\nServings: %d\n\nIngredients:\n%s\n\nInstructions:\n%s",
+            currentRecipe.getName(),
+            currentRecipe.getPrepTime(),
+            currentRecipe.getCookTime(),
+            currentRecipe.getServings(),
+            String.join("\n", currentRecipe.getIngredients()),
+            String.join("\n", currentRecipe.getInstructions())
+        );
+
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Check out this recipe!");
         shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
         startActivity(Intent.createChooser(shareIntent, "Share Recipe"));
-    }
-
-    private String generateShareText() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(recipe.getName()).append("\n\n");
-        sb.append("Prep Time: ").append(recipe.getPrepTime()).append(" min\n");
-        sb.append("Cook Time: ").append(recipe.getCookTime()).append(" min\n");
-        sb.append("Servings: ").append(recipe.getServings()).append("\n\n");
-        sb.append("Ingredients:\n");
-        for (String ingredient : recipe.getIngredients()) {
-            sb.append("- ").append(ingredient).append("\n");
-        }
-        sb.append("\nInstructions:\n");
-        int step = 1;
-        for (String instruction : recipe.getInstructions()) {
-            sb.append(step++).append(". ").append(instruction).append("\n");
-        }
-        return sb.toString();
     }
 }

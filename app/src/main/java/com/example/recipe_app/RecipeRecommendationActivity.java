@@ -255,6 +255,10 @@ public class RecipeRecommendationActivity extends AppCompatActivity implements R
         // Show loading indicator
         progressBar.setVisibility(View.VISIBLE);
 
+        // Initialize lists if not already initialized
+        if (allRecipes == null) allRecipes = new ArrayList<>();
+        if (filteredRecipes == null) filteredRecipes = new ArrayList<>();
+
         // Load recipes from Firebase
         FirebaseManager.getInstance().getAllRecipes(new FirebaseManager.FirebaseCallback<List<Recipe>>() {
             @Override
@@ -270,7 +274,11 @@ public class RecipeRecommendationActivity extends AppCompatActivity implements R
                     allRecipes.clear();
                     allRecipes.addAll(recipes);
                     filterRecipes();
-                    recipeAdapter.notifyDataSetChanged();
+                    
+                    // Update adapter
+                    if (recipeAdapter != null) {
+                        recipeAdapter.notifyDataSetChanged();
+                    }
                 }
             }
 
@@ -300,7 +308,7 @@ public class RecipeRecommendationActivity extends AppCompatActivity implements R
             "A classic Italian pasta dish with eggs, cheese, pancetta, and black pepper",
             15,
             20,
-            "https://example.com/carbonara.jpg",
+            "https://firebasestorage.googleapis.com/v0/b/recipe-app-c5aad.appspot.com/o/recipes%2Fcarbonara.jpg?alt=media",
             Arrays.asList(
                 "400g spaghetti",
                 "200g pancetta or guanciale",
@@ -324,6 +332,8 @@ public class RecipeRecommendationActivity extends AppCompatActivity implements R
         carbonara.setCuisine("Italian");
         carbonara.setCategory("Dinner");
         carbonara.setDifficulty("Medium");
+        carbonara.setServings(4);
+        carbonara.setDietaryTags(Arrays.asList("Italian", "Pasta"));
         sampleRecipes.add(carbonara);
 
         // Chicken Stir Fry
@@ -332,53 +342,107 @@ public class RecipeRecommendationActivity extends AppCompatActivity implements R
             "Chicken Stir Fry",
             "Quick and healthy Asian stir fry with tender chicken and crisp vegetables",
             15,
-            15,
-            "https://example.com/stirfry.jpg",
+            20,
+            "https://firebasestorage.googleapis.com/v0/b/recipe-app-c5aad.appspot.com/o/recipes%2Fstirfry.jpg?alt=media",
             Arrays.asList(
                 "500g chicken breast, sliced",
                 "2 cups mixed vegetables",
+                "3 cloves garlic, minced",
+                "1 inch ginger, grated",
                 "3 tbsp soy sauce",
-                "2 cloves garlic, minced",
-                "1 tbsp ginger, grated",
                 "2 tbsp vegetable oil",
                 "Salt and pepper to taste"
             )
         );
         stirFry.setInstructions(Arrays.asList(
-            "Slice chicken and vegetables",
+            "Slice chicken into thin strips",
             "Heat oil in a large wok or pan",
-            "Cook chicken until golden",
-            "Add garlic and ginger",
-            "Add vegetables and stir fry",
+            "Add garlic and ginger, stir-fry until fragrant",
+            "Add chicken and cook until golden",
+            "Add vegetables and stir-fry until crisp-tender",
             "Add soy sauce and seasonings",
-            "Cook until vegetables are crisp-tender",
+            "Cook for 2-3 more minutes",
             "Serve hot with rice"
         ));
         stirFry.setCuisine("Asian");
         stirFry.setCategory("Dinner");
         stirFry.setDifficulty("Easy");
+        stirFry.setServings(4);
+        stirFry.setDietaryTags(Arrays.asList("Asian", "Healthy", "Quick"));
         sampleRecipes.add(stirFry);
 
+        // Chocolate Chip Cookies
+        Recipe cookies = new Recipe(
+            "3",
+            "Classic Chocolate Chip Cookies",
+            "Soft and chewy chocolate chip cookies with crispy edges",
+            20,
+            12,
+            "https://firebasestorage.googleapis.com/v0/b/recipe-app-c5aad.appspot.com/o/recipes%2Fcookies.jpg?alt=media",
+            Arrays.asList(
+                "2 1/4 cups all-purpose flour",
+                "1 cup butter, softened",
+                "3/4 cup sugar",
+                "3/4 cup brown sugar",
+                "2 large eggs",
+                "2 cups chocolate chips",
+                "1 tsp vanilla extract",
+                "1 tsp baking soda",
+                "1/2 tsp salt"
+            )
+        );
+        cookies.setInstructions(Arrays.asList(
+            "Preheat oven to 375°F (190°C)",
+            "Cream together butter and sugars",
+            "Beat in eggs and vanilla",
+            "Mix in flour, baking soda, and salt",
+            "Stir in chocolate chips",
+            "Drop rounded tablespoons onto baking sheets",
+            "Bake for 10-12 minutes until golden",
+            "Cool on wire racks"
+        ));
+        cookies.setCuisine("American");
+        cookies.setCategory("Dessert");
+        cookies.setDifficulty("Easy");
+        cookies.setServings(24);
+        cookies.setDietaryTags(Arrays.asList("Dessert", "Baking"));
+        sampleRecipes.add(cookies);
+
         // Save sample recipes to Firebase
+        final int[] savedCount = {0};
         for (Recipe recipe : sampleRecipes) {
             FirebaseManager.getInstance().saveRecipe(recipe, new FirebaseManager.FirebaseCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
                     Log.d("RecipeRecommendation", "Sample recipe saved: " + recipe.getName());
+                    savedCount[0]++;
+                    if (savedCount[0] == sampleRecipes.size()) {
+                        // All recipes saved, update UI
+                        allRecipes.clear();
+                        allRecipes.addAll(sampleRecipes);
+                        filterRecipes();
+                        if (recipeAdapter != null) {
+                            recipeAdapter.notifyDataSetChanged();
+                        }
+                    }
                 }
 
                 @Override
                 public void onFailure(Exception e) {
                     Log.e("RecipeRecommendation", "Error saving sample recipe: " + e.getMessage());
+                    savedCount[0]++;
+                    if (savedCount[0] == sampleRecipes.size()) {
+                        // Even if some failed, update UI with what we have
+                        allRecipes.clear();
+                        allRecipes.addAll(sampleRecipes);
+                        filterRecipes();
+                        if (recipeAdapter != null) {
+                            recipeAdapter.notifyDataSetChanged();
+                        }
+                    }
                 }
             });
         }
-
-        // Update the UI
-        allRecipes.clear();
-        allRecipes.addAll(sampleRecipes);
-        filterRecipes();
-        recipeAdapter.notifyDataSetChanged();
     }
 
     private void shareRecipe(Recipe recipe) {
@@ -455,8 +519,23 @@ public class RecipeRecommendationActivity extends AppCompatActivity implements R
 
     @Override
     public void onRecipeClick(Recipe recipe) {
-        Intent intent = new Intent(this, RecipeDetailActivity.class);
-        intent.putExtra("RECIPE", recipe);
-        startActivity(intent);
+        // Add to history
+        FirebaseManager.getInstance().addToHistory(recipe.getId(), new FirebaseManager.FirebaseCallback<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                Log.d("RecipeRecommendation", "Added to history: " + recipe.getName());
+                // Start detail activity after successfully adding to history
+                Intent intent = RecipeDetailActivity.newIntent(RecipeRecommendationActivity.this, recipe.getId());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.e("RecipeRecommendation", "Error adding to history: " + e.getMessage());
+                // Still start detail activity even if adding to history fails
+                Intent intent = RecipeDetailActivity.newIntent(RecipeRecommendationActivity.this, recipe.getId());
+                startActivity(intent);
+            }
+        });
     }
 }

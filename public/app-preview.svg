@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="300" height="600" viewBox="0 0 300 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Phone frame -->
+    <rect x="10" y="10" width="280" height="580" rx="20" fill="#2C3E50"/>
+    <rect x="20" y="20" width="260" height="560" rx="15" fill="#F7F9FC"/>
+    
+    <!-- App header -->
+    <rect x="20" y="20" width="260" height="60" fill="#FF6B6B"/>
+    <circle cx="50" cy="50" r="15" fill="white"/>
+    <rect x="80" y="40" width="120" height="20" rx="5" fill="white"/>
+    
+    <!-- Content -->
+    <rect x="35" y="100" width="230" height="140" rx="10" fill="#E0E0E0"/>
+    <rect x="35" y="260" width="230" height="140" rx="10" fill="#E0E0E0"/>
+    <rect x="35" y="420" width="230" height="140" rx="10" fill="#E0E0E0"/>
+    
+    <!-- Navigation -->
+    <rect x="20" y="540" width="260" height="40" fill="#FF6B6B"/>
+</svg> 

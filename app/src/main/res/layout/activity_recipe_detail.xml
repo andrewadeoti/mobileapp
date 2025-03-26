@@ -6,6 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Loading Progress Bar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+
     <!-- App bar with toolbar -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -103,6 +111,15 @@
                 android:textSize="20sp"
                 android:textStyle="bold"/>
 
+            <TextView
+                android:id="@+id/noIngredientsText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="No ingredients available"
+                android:textAlignment="center"
+                android:visibility="gone"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/ingredientsRecyclerView"
                 android:layout_width="match_parent"
@@ -118,6 +135,15 @@
                 android:text="Instructions"
                 android:textSize="20sp"
                 android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/noInstructionsText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="No instructions available"
+                android:textAlignment="center"
+                android:visibility="gone"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/instructionsRecyclerView"
