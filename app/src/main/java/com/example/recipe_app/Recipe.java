@@ -41,27 +41,44 @@ public class Recipe implements Serializable {
     private double rating;      // How good people think it is (0.0 to 5.0)
     private boolean isFavorite; // Whether the user likes this recipe
     private String userId;      // Who created this recipe
+    private List<String> dietaryTags; // Dietary information (e.g., Vegetarian, Gluten-Free)
 
     /**
-     * Creates a new recipe
-     * 
-     * This is like creating a new recipe card. We need to know:
-     * - What to call it
-     * - What it is
-     * - What it looks like (picture)
+     * Creates a new recipe with basic information
      */
     public Recipe(String name, String description, String imageUrl) {
-        this.id = UUID.randomUUID().toString();  // Give it a unique number
+        this.id = UUID.randomUUID().toString();
         this.name = name;
         this.description = description;
         this.imageUrl = imageUrl;
-        this.ingredients = new ArrayList<>();    // Start with empty lists
+        this.ingredients = new ArrayList<>();
         this.instructions = new ArrayList<>();
-        this.rating = 0.0;                       // Start with no rating
-        this.servings = 4;                       // Default to 4 servings
-        this.difficulty = "Medium";              // Default to medium difficulty
-        this.isFavorite = false;                 // Not a favorite yet
-        this.userId = null;                      // No creator yet
+        this.dietaryTags = new ArrayList<>();
+        this.rating = 0.0;
+        this.servings = 4;
+        this.difficulty = "Medium";
+        this.isFavorite = false;
+        this.userId = null;
+    }
+
+    /**
+     * Creates a new recipe with all details
+     */
+    public Recipe(String id, String name, String description, int prepTime, int cookTime, String imageUrl, List<String> ingredients) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.prepTime = prepTime;
+        this.cookTime = cookTime;
+        this.imageUrl = imageUrl;
+        this.ingredients = new ArrayList<>(ingredients);
+        this.instructions = new ArrayList<>();
+        this.dietaryTags = new ArrayList<>();
+        this.rating = 0.0;
+        this.servings = 4;
+        this.difficulty = "Medium";
+        this.isFavorite = false;
+        this.userId = null;
     }
 
     // Simple getters and setters to access and change recipe information
@@ -129,6 +146,9 @@ public class Recipe implements Serializable {
 
     public String getUserId() { return userId; }
     public void setUserId(String userId) { this.userId = userId; }
+
+    public List<String> getDietaryTags() { return dietaryTags; }
+    public void setDietaryTags(List<String> tags) { this.dietaryTags = new ArrayList<>(tags); }
 
     /**
      * Shows the total cooking time in a nice format

@@ -60,7 +60,7 @@ public class AddToShoppingListDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.dialog_add_to_shopping_list, null);
 
         // Create the list of checkboxes
-        LinearLayout ingredientList = view.findViewById(R.id.ingredientList);
+        LinearLayout ingredientList = view.findViewById(R.id.ingredientsContainer);
         List<CheckBox> checkBoxes = new ArrayList<>();
 
         // Add a checkbox for each ingredient
