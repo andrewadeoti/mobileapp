@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- 
+    Base Material3 theme implementation
+    Reference: https://m3.material.io/develop/android/mdc-android/getting-started
+    Copyright (c) 2024 Google LLC, Apache License 2.0
+    -->
+    <style name="Base.Theme.RECIPEAPP" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Base theme can be customized with light theme attributes -->
+    </style>
+
+    <!-- Main application theme extending base theme -->
+    <style name="Theme.RECIPEAPP" parent="Base.Theme.RECIPEAPP" />
+
+    <!-- 
+    Material Design theme implementation
+    Reference: https://material.io/develop/android/theming/color
+    Copyright (c) 2024 Google LLC, Apache License 2.0
+    -->
+    <style name="Theme.RecipeApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand colors -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        
+        <!-- Secondary brand colors -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        
+        <!-- Status bar color -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        
+        <!-- Text colors -->
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        
+        <!-- Background colors -->
+        <item name="android:windowBackground">@color/background_color</item>
+        
+        <!-- Button styles -->
+        <item name="materialButtonStyle">@style/Widget.MaterialComponents.Button</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.MaterialComponents.Button.OutlinedButton</item>
+    </style>
+
+    <!-- Custom button styles -->
+    <style name="Widget.App.Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/white</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
+    </style>
+
+    <style name="Widget.App.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="strokeColor">?attr/colorPrimary</item>
+    </style>
+
+    <!-- 
+    Full screen theme implementation
+    Reference: https://developer.android.com/develop/ui/views/layout/immersive
+    Copyright (c) 2024 Google LLC, Apache License 2.0
+    -->
+    <style name="Theme.RecipeApp.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <!-- 
+    Material Design Toolbar implementation
+    Reference: https://material.io/components/app-bars-top/android
+    Copyright (c) 2024 Google LLC, Apache License 2.0
+    -->
+    <style name="Widget.App.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="titleTextColor">@color/white</item>
+        <item name="subtitleTextColor">@color/white</item>
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
+</resources>

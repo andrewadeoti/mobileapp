@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="registration_title" type="id" />
+    <item name="submit_button" type="id" />
+    <item name="password_field" type="id" />
+    <item name="login_button" type="id" />
+    <item name="forgot_password_link" type="id" />
+    <item name="favourites_button" type="id" />
+    <item name="history_button" type="id" />
+    <item name="menu_spinner" type="id" />
+</resources>

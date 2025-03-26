@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 
+    Material Design ShapeAppearance implementation
+    Reference: https://material.io/develop/android/theming/shape
+    Copyright (c) 2024 Google LLC, Apache License 2.0
+    -->
+    <style name="CircleImageView">
+        <!-- Creates a perfectly circular image view -->
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <!-- 
+    Material Design Shape Theming implementation
+    Reference: https://material.io/design/shape/about-shape.html
+    Copyright (c) 2024 Google LLC, Apache License 2.0
+    -->
+    <style name="RoundedCorners">
+        <!-- Applies rounded corners to UI elements -->
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <!-- 
+    Material Design Text Field implementation
+    Reference: https://material.io/components/text-fields/android
+    Copyright (c) 2024 Google LLC, Apache License 2.0
+    -->
+    <style name="SearchInputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <!-- Customizes the search input appearance -->
+        <item name="boxStrokeColor">@color/light_gray</item>
+        <item name="boxBackgroundColor">@color/light_gray</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <!-- Rounded corners for search box -->
+        <item name="boxCornerRadiusTopStart">8dp</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="boxCornerRadiusBottomStart">8dp</item>
+        <item name="boxCornerRadiusBottomEnd">8dp</item>
+    </style>
+
+    <!-- 
+    Material Design Button implementation
+    Reference: https://material.io/components/buttons/android
+    Copyright (c) 2024 Google LLC, Apache License 2.0
+    -->
+    <style name="Button.Primary" parent="Widget.MaterialComponents.Button">
+        <!-- Main action button styling -->
+        <item name="android:textColor">@color/white</item>
+        <item name="backgroundTint">@color/black</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- 
+    Material Design Text Button implementation
+    Reference: https://material.io/components/buttons/android#text-button
+    Copyright (c) 2024 Google LLC, Apache License 2.0
+    -->
+    <style name="Button.Secondary" parent="Widget.MaterialComponents.Button.TextButton">
+        <!-- Less prominent button styling -->
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="rippleColor">@color/light_gray</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- 
+    Material Design Typography implementation
+    Reference: https://material.io/design/typography/the-type-system.html
+    Copyright (c) 2024 Google LLC, Apache License 2.0
+    -->
+    <style name="TextAppearance.Title" parent="TextAppearance.MaterialComponents.Headline6">
+        <!-- Main title text style -->
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Subtitle" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <!-- Subtitle text style -->
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <style name="TextAppearance.Caption" parent="TextAppearance.MaterialComponents.Caption">
+        <!-- Small caption text style -->
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <!-- 
+    Material Design Top App Bar implementation
+    Reference: https://material.io/components/app-bars-top/android
+    Copyright (c) 2024 Google LLC, Apache License 2.0
+    -->
+    <style name="AppTheme.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <!-- Main toolbar appearance -->
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="titleTextColor">@color/white</item>
+        <item name="subtitleTextColor">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="actionMenuTextColor">@color/white</item>
+        <item name="colorControlNormal">@color/white</item>
+    </style>
+
+    <!-- 
+    Material Design Menu implementation
+    Reference: https://material.io/components/menus/android
+    Copyright (c) 2024 Google LLC, Apache License 2.0
+    -->
+    <style name="AppTheme.PopupMenu" parent="Widget.MaterialComponents.PopupMenu">
+        <!-- Standard popup menu styling -->
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="AppTheme.PopupMenu.Overflow" parent="Widget.MaterialComponents.PopupMenu.Overflow">
+        <!-- Overflow menu styling -->
+        <item name="android:textColor">@color/black</item>
+    </style>
+</resources>

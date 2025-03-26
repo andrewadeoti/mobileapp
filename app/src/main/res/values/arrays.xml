@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="units">
+        <item>g</item>
+        <item>kg</item>
+        <item>ml</item>
+        <item>l</item>
+        <item>cup</item>
+        <item>tbsp</item>
+        <item>tsp</item>
+        <item>oz</item>
+        <item>lb</item>
+        <item>piece</item>
+        <item>pinch</item>
+    </string-array>
+
+    <string-array name="languages">
+        <item>English</item>
+        <item>Spanish</item>
+        <item>French</item>
+        <item>German</item>
+        <item>Italian</item>
+        <item>Chinese</item>
+        <item>Japanese</item>
+        <item>Korean</item>
+    </string-array>
+
+    <string-array name="notification_frequencies">
+        <item>Immediately</item>
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+        <item>Never</item>
+    </string-array>
+</resources> 

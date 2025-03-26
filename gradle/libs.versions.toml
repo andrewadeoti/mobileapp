@@ -1,0 +1,79 @@
+[versions]
+# Android
+agp = "8.9.1"
+androidxCore = "1.12.0"
+androidxAppCompat = "1.6.1"
+material = "1.11.0"
+androidxActivity = "1.8.2"
+androidxConstraintLayout = "2.1.4"
+androidxRecyclerView = "1.3.2"
+androidxCardView = "1.0.0"
+androidxCoordinatorLayout = "1.2.0"
+androidxAnnotations = "1.7.1"
+
+# Google Services
+playServicesMaps = "18.2.0"
+playServicesLocation = "21.0.1"
+playServicesAuth = "20.7.0"
+googleAndroidLibrariesMapsplatformSecretsGradlePlugin = "2.0.1"
+
+# CameraX
+camerax = "1.3.1"
+
+# Glide
+glide = "4.16.0"
+
+# OkHttp
+okhttp = "4.12.0"
+
+# Testing
+junit = "4.13.2"
+junitVersion = "1.2.1"
+espressoCore = "3.5.1"
+
+# RecyclerView
+androidxRecyclerViewSelection = "1.1.0"
+androidxSwipeRefreshLayout = "1.1.0"
+
+[libraries]
+# AndroidX
+androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppCompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+activity = { group = "androidx.activity", name = "activity", version.ref = "androidxActivity" }
+constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidxConstraintLayout" }
+recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "androidxRecyclerView" }
+cardview = { group = "androidx.cardview", name = "cardview", version.ref = "androidxCardView" }
+coordinatorlayout = { group = "androidx.coordinatorlayout", name = "coordinatorlayout", version.ref = "androidxCoordinatorLayout" }
+androidx-annotations = { group = "androidx.annotation", name = "annotation", version.ref = "androidxAnnotations" }
+
+# RecyclerView
+recyclerview-selection = { group = "androidx.recyclerview", name = "recyclerview-selection", version.ref = "androidxRecyclerViewSelection" }
+swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "androidxSwipeRefreshLayout" }
+
+# Google Services
+googleid = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
+play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
+
+# CameraX
+androidx-camera-core = { group = "androidx.camera", name = "camera-core", version.ref = "camerax" }
+androidx-camera-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "camerax" }
+androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "camerax" }
+androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "camerax" }
+
+# Glide
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
+
+# OkHttp
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+
+# Testing
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+google-android-libraries-mapsplatform-secrets-gradle-plugin = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "googleAndroidLibrariesMapsplatformSecretsGradlePlugin" }

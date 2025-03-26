@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+Layout implementation based on Material Design Components
+Reference: https://material.io/components/app-bars-top/android#regular-top-app-bar
+Copyright (c) 2024 Google LLC, Apache License 2.0
+-->
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 
+    Top App Bar implementation
+    Reference: https://material.io/develop/android/components/app-bars-top
+    Copyright (c) 2024 Google LLC, Apache License 2.0
+    -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/AppTheme.Toolbar"
+            app:popupTheme="@style/AppTheme.PopupMenu"
+            app:layout_scrollFlags="scroll|enterAlways"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- 
+    Scrolling behavior implementation
+    Reference: https://material.io/develop/android/components/collapsing-toolbar-layout
+    Copyright (c) 2024 Google LLC, Apache License 2.0
+    -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- 
+            Card implementation
+            Reference: https://material.io/components/cards/android
+            Copyright (c) 2024 Google LLC, Apache License 2.0
+            -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <!-- 
+                    SearchView implementation
+                    Reference: https://developer.android.com/develop/ui/views/search
+                    Copyright (c) 2024 Google LLC, Apache License 2.0
+                    -->
+                    <androidx.appcompat.widget.SearchView
+                        android:id="@+id/searchView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        app:iconifiedByDefault="false"
+                        app:queryHint="Search recipes..."/>
+
+                    <!-- Sort options section -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Sort by:"
+                            android:layout_marginEnd="8dp"/>
+
+                        <Spinner
+                            android:id="@+id/sortSpinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+
+                    <!-- 
+                    Chip Group implementation
+                    Reference: https://material.io/components/chips/android
+                    Copyright (c) 2024 Google LLC, Apache License 2.0
+                    -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Category:"
+                        android:layout_marginBottom="4dp"/>
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp">
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/categoryFilterChips"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:singleSelection="true"/>
+
+                    </HorizontalScrollView>
+
+                    <!-- Cuisine filter section -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cuisine:"
+                        android:layout_marginBottom="4dp"/>
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp">
+
+                        <!-- Cuisine filter chips -->
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/cuisineFilterChips"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:singleSelection="true"/>
+
+                    </HorizontalScrollView>
+
+                    <!-- Difficulty filter section -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Difficulty:"
+                        android:layout_marginBottom="4dp"/>
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp">
+
+                        <!-- Difficulty filter chips -->
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/difficultyFilterChips"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:singleSelection="true"/>
+
+                    </HorizontalScrollView>
+
+                    <!-- Cooking time filter -->
+                    <TextView
+                        android:id="@+id/cookingTimeText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Max cooking time: 2h 0m"
+                        android:layout_marginBottom="4dp"/>
+
+                    <SeekBar
+                        android:id="@+id/cookingTimeSeekBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- 
+            Progress indicator implementation
+            Reference: https://material.io/components/progress-indicators/android
+            Copyright (c) 2024 Google LLC, Apache License 2.0
+            -->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"/>
+
+            <!-- 
+            RecyclerView implementation
+            Reference: https://developer.android.com/develop/ui/views/layout/recyclerview
+            Copyright (c) 2024 Google LLC, Apache License 2.0
+            -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recipeRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:padding="4dp"/>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
