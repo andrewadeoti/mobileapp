@@ -16,7 +16,10 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
@@ -45,36 +48,36 @@ public class AddShoppingItemDialog extends DialogFragment {
     /**
      * Shows the dialog with fields for the new item
      */
+    @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_add_shopping_item, null);
 
         // Get the input fields
-        EditText nameInput = view.findViewById(R.id.nameInput);
-        EditText quantityInput = view.findViewById(R.id.quantityInput);
-        EditText unitInput = view.findViewById(R.id.unitInput);
+        EditText nameInput = view.findViewById(R.id.item_name_input);
+        EditText quantityInput = view.findViewById(R.id.item_quantity_input);
+        EditText unitInput = view.findViewById(R.id.item_unit_input);
 
-        // Set up the dialog buttons
+        // Set up the dialog
         builder.setView(view)
                .setTitle("Add Shopping Item")
-               .setPositiveButton("Add", (dialog, id) -> {
-                   // Get what was typed in
+               .setPositiveButton("Add", (dialog, which) -> {
                    String name = nameInput.getText().toString().trim();
                    String quantity = quantityInput.getText().toString().trim();
                    String unit = unitInput.getText().toString().trim();
-
-                   // Only add if there's a name
+                   
                    if (!name.isEmpty() && listener != null) {
                        listener.onItemAdded(name, quantity, unit);
                    }
                })
-               .setNegativeButton("Cancel", (dialog, id) -> {
-                   // Just close the dialog
-                   dialog.cancel();
-               });
+               .setNegativeButton("Cancel", null);
 
         return builder.create();
+    }
+
+    public void setOnItemAddedListener(OnItemAddedListener listener) {
+        this.listener = listener;
     }
 }
