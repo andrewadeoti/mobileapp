@@ -59,6 +59,8 @@ public class Recipe implements Serializable {
         this.difficulty = "Medium";
         this.isFavorite = false;
         this.userId = null;
+        this.prepTime = 0;
+        this.cookTime = 0;
     }
 
     /**
