@@ -12,18 +12,41 @@ A feature-rich Android recipe application that helps users discover, save, and o
 - Location-based features for finding ingredients
 - User authentication and cloud sync
 
-## Code Attribution
+## Code Attribution & References
 
-This project includes code adapted from the following sources:
+This project includes code and patterns adapted from the following sources:
 
-1. Location tracking implementation adapted from:
-   - [Android Location API Tutorial](https://www.digitalocean.com/community/tutorials/android-location-api-tracking-gps) by DigitalOcean
+1. Performance & Data Management:
+   - [Android Vitals and Performance Optimization](https://developer.android.com/topic/performance/vitals)
+   - [RecyclerView Optimization Tips](https://www.youtube.com/watch?v=PamhELVWYY0)
+   - [RecyclerView Performance Tips](https://www.youtube.com/watch?v=hVJpWSalzbo)
+   - [LiveData Overview](https://developer.android.com/topic/libraries/architecture/livedata)
+   - [Room Database](https://developer.android.com/training/data-storage/room)
 
-2. Firebase integration patterns adapted from:
+2. Firebase & Analytics:
    - [Firebase Android Codelab](https://firebase.google.com/codelabs/firebase-android)
+   - [Firebase Analytics](https://firebase.google.com/docs/analytics/android/start)
+   - Used for user authentication, cloud storage, and data synchronization
 
-3. RecyclerView implementations inspired by:
-   - [Android Developers Guide](https://developer.android.com/guide/topics/ui/layout/recyclerview)
+3. UI Components & Design:
+   - [Material Components for Android](https://github.com/material-components/material-components-android)
+   - [Android Asset Studio - Icon Generator](https://romannurik.github.io/AndroidAssetStudio/)
+   - [Menu/User Panel Tutorial 1](https://www.youtube.com/watch?v=dJm7LACOn80)
+   - [Menu/User Panel Tutorial 2](https://www.youtube.com/watch?v=k1RUOexThGs)
+
+4. Image & Camera:
+   - [Glide Image Loading Library](https://github.com/bumptech/glide)
+   - [CameraX Overview](https://developer.android.com/training/camerax)
+   - [ML Kit Text Recognition](https://developers.google.com/ml-kit/vision/text-recognition/android)
+
+5. Location Services:
+   - [Android Location API Tutorial](https://www.digitalocean.com/community/tutorials/android-location-api-tracking-gps)
+   - Used for GPS location tracking and nearby store finding
+
+6. Utilities & Data Processing:
+   - [Java Concurrency in Android](https://developer.android.com/reference/java/util/concurrent/package-summary)
+   - [Gson Library](https://github.com/google/gson)
+   - [SearchRecentSuggestions](https://developer.android.com/reference/android/provider/SearchRecentSuggestions)
 
 ## License
 
